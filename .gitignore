@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+piddelta
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented code tests
+lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# node_modules
+node_modules/
+
+# Production build directory
+dist/
+
+# Env files
+.env
+.env.local
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
