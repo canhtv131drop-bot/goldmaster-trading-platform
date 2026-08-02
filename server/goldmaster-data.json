@@ -1,0 +1,112 @@
+{
+  "leads": [
+    {
+      "id": 1,
+      "name": "Nguyễn Văn Hùng",
+      "phone": "0988123456",
+      "email": "",
+      "capital": "$1,000 - $5,000",
+      "source": "EasyGold Zalo VIP Funnel",
+      "status": "Mới",
+      "date": "2026-08-01 14:30",
+      "notes": "Zalo VIP direct join"
+    },
+    {
+      "id": 2,
+      "name": "Trần Thị Mai",
+      "phone": "0912345678",
+      "email": "",
+      "capital": "Trên $10,000",
+      "source": "EasyGold Zalo VIP Funnel",
+      "status": "Đã liên hệ",
+      "date": "2026-08-01 12:15",
+      "notes": "Đã duyệt vào nhóm Zalo VIP"
+    }
+  ],
+  "signals": [
+    {
+      "id": "XAU-1089",
+      "pair": "XAUUSD",
+      "type": "BUY LIMIT",
+      "entry": "2642.50",
+      "sl": "2636.00",
+      "tp1": "2652.00",
+      "tp2": "2660.00",
+      "pips": "+95 Pips",
+      "result": "WIN",
+      "date": "Hôm nay 15:40",
+      "note": "Quét nến thanh khoản phiên Âu (Liquidity Sweep)"
+    },
+    {
+      "id": "XAU-1088",
+      "pair": "XAUUSD",
+      "type": "SELL NOW",
+      "entry": "2658.00",
+      "sl": "2664.00",
+      "tp1": "2648.00",
+      "tp2": "2640.00",
+      "pips": "+100 Pips",
+      "result": "WIN",
+      "date": "Hôm nay 09:20",
+      "note": "Phản ứng vùng Cung h1 (Supply Zone)"
+    },
+    {
+      "id": "XAU-1087",
+      "pair": "XAUUSD",
+      "type": "BUY NOW",
+      "entry": "2635.00",
+      "sl": "2629.00",
+      "tp1": "2645.00",
+      "tp2": "2655.00",
+      "pips": "+100 Pips",
+      "result": "WIN",
+      "date": "Hôm qua 20:15",
+      "note": "Chạm sóng hỗ trợ nến mạ vàng D1"
+    }
+  ],
+  "cms": [
+    {
+      "key": "zaloGroupUrl",
+      "value": "https://zalo.me/g/hyoiwdpqc5auq9vbainr"
+    },
+    {
+      "key": "telegramGroupUrl",
+      "value": "https://t.me/EasyGold_Signals_VIP"
+    },
+    {
+      "key": "supportHotline",
+      "value": "0353.753.863"
+    },
+    {
+      "key": "availableSlots",
+      "value": "14"
+    },
+    {
+      "key": "countdownHours",
+      "value": "5"
+    },
+    {
+      "key": "countdownMinutes",
+      "value": "24"
+    },
+    {
+      "key": "bannerNotice",
+      "value": "🔥 NHẬN 5-10 TÍN HIỆU XAUUSD MỖI NGÀY TẠI NHÓM ZALO VIP - CHỈ CÒN 14 SLOT!"
+    },
+    {
+      "key": "telegramBotToken",
+      "value": ""
+    },
+    {
+      "key": "telegramChatId",
+      "value": ""
+    }
+  ],
+  "admin": [
+    {
+      "id": 1,
+      "password": "Canhdepzai1999@"
+    }
+  ],
+  "nextLeadId": 3
+}
