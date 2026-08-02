@@ -4,48 +4,66 @@ const AppContext = createContext();
 
 export function AppProvider({ children }) {
   // 1. CRM Leads Storage
-  const [leads, setLeads] = useState(() => {
-    const saved = localStorage.getItem('easygold_leads');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, name: 'Nguyễn Văn Hùng', phone: '0988123456', capital: '$1,000 - $5,000', source: 'EasyGold Zalo VIP Funnel', status: 'Mới', date: '2026-08-01 14:30', notes: 'Zalo VIP direct join' },
-      { id: 2, name: 'Trần Thị Mai', phone: '0912345678', capital: 'Trên $10,000', source: 'EasyGold Zalo VIP Funnel', status: 'Đã liên hệ', date: '2026-08-01 12:15', notes: 'Đã duyệt vào nhóm Zalo VIP' }
-    ];
-  });
-
-  // Save Leads to LocalStorage
-  useEffect(() => {
-    localStorage.setItem('easygold_leads', JSON.stringify(leads));
-  }, [leads]);
+  const [leads, setLeads] = useState([]);
 
   // 2. Signals Storage
-  const [signals, setSignals] = useState([
-    { id: 'XAU-1089', pair: 'XAUUSD', type: 'BUY LIMIT', entry: '2642.50', sl: '2636.00', tp1: '2652.00', tp2: '2660.00', pips: '+95 Pips', result: 'WIN', date: 'Hôm nay 15:40', note: 'Quét nến thanh khoản phiên Âu (Liquidity Sweep)' },
-    { id: 'XAU-1088', pair: 'XAUUSD', type: 'SELL NOW', entry: '2658.00', sl: '2664.00', tp1: '2648.00', tp2: '2640.00', pips: '+100 Pips', result: 'WIN', date: 'Hôm nay 09:20', note: 'Phản ứng vùng Cung h1 (Supply Zone)' },
-    { id: 'XAU-1087', pair: 'XAUUSD', type: 'BUY NOW', entry: '2635.00', sl: '2629.00', tp1: '2645.00', tp2: '2655.00', pips: '+100 Pips', result: 'WIN', date: 'Hôm qua 20:15', note: 'Chạm sóng hỗ trợ nến mạ vàng D1' }
-  ]);
+  const [signals, setSignals] = useState([]);
 
   // 3. CMS & Telegram Settings
-  const [cms, setCms] = useState(() => {
-    const saved = localStorage.getItem('easygold_cms');
-    return saved ? JSON.parse(saved) : {
-      zaloGroupUrl: 'https://zalo.me/g/hyoiwdpqc5auq9vbainr',
-      telegramGroupUrl: 'https://t.me/EasyGold_Signals_VIP',
-      supportHotline: '0353.753.863',
-      availableSlots: 14,
-      countdownHours: 5,
-      countdownMinutes: 24,
-      bannerNotice: '🔥 NHẬN 5-10 TÍN HIỆU XAUUSD MỖI NGÀY TẠI NHÓM ZALO VIP - CHỈ CÒN 14 SLOT!',
-      telegramBotToken: '',
-      telegramChatId: ''
-    };
+  const [cms, setCmsState] = useState({
+    zaloGroupUrl: 'https://zalo.me/g/hyoiwdpqc5auq9vbainr',
+    telegramGroupUrl: 'https://t.me/EasyGold_Signals_VIP',
+    supportHotline: '0353.753.863',
+    availableSlots: 14,
+    countdownHours: 5,
+    countdownMinutes: 24,
+    bannerNotice: '🔥 NHẬN 5-10 TÍN HIỆU XAUUSD MỖI NGÀY TẠI NHÓM ZALO VIP - CHỈ CÒN 14 SLOT!',
+    telegramBotToken: '',
+    telegramChatId: ''
   });
 
+  // Fetch initial data from Express API
   useEffect(() => {
-    localStorage.setItem('easygold_cms', JSON.stringify(cms));
-  }, [cms]);
+    // Fetch Leads
+    fetch('/api/leads')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setLeads(data);
+      })
+      .catch(err => console.error('Failed to fetch leads from API:', err));
+
+    // Fetch Signals
+    fetch('/api/signals')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setSignals(data);
+      })
+      .catch(err => console.error('Failed to fetch signals from API:', err));
+
+    // Fetch CMS Settings
+    fetch('/api/cms')
+      .then(res => res.json())
+      .then(data => {
+        if (data && typeof data === 'object') {
+          setCmsState(prev => ({ ...prev, ...data }));
+        }
+      })
+      .catch(err => console.error('Failed to fetch cms settings from API:', err));
+  }, []);
+
+  // Update CMS
+  const setCms = (newCmsOrFn) => {
+    const updated = typeof newCmsOrFn === 'function' ? newCmsOrFn(cms) : newCmsOrFn;
+    setCmsState(updated);
+    fetch('/api/cms', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated)
+    }).catch(err => console.error('Failed to update CMS via API:', err));
+  };
 
   // 4. Testimonials
-  const [testimonials, setTestimonials] = useState([
+  const [testimonials] = useState([
     { id: 1, name: 'Anh Đức Minh', role: 'Trader 2 năm', profit: '+1,450$ / tháng', comment: 'Từ khi vào nhóm Zalo VIP EasyGold, mình không còn đi lệnh bậy bạ nữa. Bắn lệnh nào chắc lệnh đó, tỷ lệ win cực cao!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80' },
     { id: 2, name: 'Chị Hoàng Yến', role: 'Kinh doanh tự do', profit: '+2,800$ / tháng', comment: 'Đội ngũ hỗ trợ Zalo tận tình, báo điểm Entry, SL, TP rất rõ ràng. Cứ đúng lệnh vào nhóm Zalo báo là chốt lời thôi.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' },
     { id: 3, name: 'Bác Tuấn Hùng', role: 'Nghỉ hưu', profit: '+980$ / tháng', comment: 'Nhóm Zalo hoạt động văn minh, Admin Mr Harry phân tích nến rất có tâm. Vốn nhỏ vẫn tăng trưởng bền vững.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80' }
@@ -93,14 +111,24 @@ export function AppProvider({ children }) {
   const [currentRoute, setCurrentRoute] = useState('home');
   const [adminTab, setAdminTab] = useState('dashboard');
 
-  // Dynamic Admin Password State (Default: Canhdepzai1999@)
-  const [adminPassword, setAdminPasswordState] = useState(() => {
-    return localStorage.getItem('easygold_admin_password') || 'Canhdepzai1999@';
-  });
+  // Dynamic Admin Password State
+  const [adminPassword, setAdminPasswordState] = useState('Canhdepzai1999@');
 
-  const updateAdminPassword = (newPassword) => {
-    setAdminPasswordState(newPassword);
-    localStorage.setItem('easygold_admin_password', newPassword);
+  const updateAdminPassword = async (newPassword) => {
+    try {
+      const res = await fetch('/api/auth/password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newPassword })
+      });
+      if (res.ok) {
+        setAdminPasswordState(newPassword);
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed to update admin password via API:', err);
+    }
+    return false;
   };
 
   // Admin Authentication State
@@ -108,11 +136,27 @@ export function AppProvider({ children }) {
     return sessionStorage.getItem('easygold_admin_auth') === 'true';
   });
 
-  const loginAdmin = (inputPassword) => {
-    if (inputPassword === adminPassword) {
-      setIsAdminAuthenticated(true);
-      sessionStorage.setItem('easygold_admin_auth', 'true');
-      return true;
+  const loginAdmin = async (inputPassword) => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: inputPassword })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsAdminAuthenticated(true);
+        sessionStorage.setItem('easygold_admin_auth', 'true');
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed admin login via API:', err);
+      // Local fallback
+      if (inputPassword === adminPassword) {
+        setIsAdminAuthenticated(true);
+        sessionStorage.setItem('easygold_admin_auth', 'true');
+        return true;
+      }
     }
     return false;
   };
@@ -154,35 +198,91 @@ export function AppProvider({ children }) {
         text: message,
         parse_mode: 'Markdown'
       })
-    }).then(res => res.json()).then(data => {
-      console.log('Telegram Push Result:', data);
-    }).catch(err => {
-      console.error('Telegram Push Error:', err);
-    });
+    }).catch(err => console.error('Telegram Push Error:', err));
   };
 
-  const addLead = (newLeadData) => {
-    const newEntry = {
+  // API Call to add Lead
+  const addLead = async (newLeadData) => {
+    // Track Meta Pixel Lead Conversion
+    if (typeof window !== 'undefined' && window.fbq) {
+      try {
+        window.fbq('track', 'Lead', {
+          content_name: newLeadData.source || 'GoldMaster Lead',
+          status: 'Submitted'
+        });
+      } catch (e) {
+        console.error('FB Pixel Lead event error:', e);
+      }
+    }
+
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newLeadData)
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setLeads(prev => [created, ...prev]);
+        return created;
+      }
+    } catch (err) {
+      console.error('Failed to add lead via API:', err);
+    }
+    // Fallback if server unreachable
+    const fallbackEntry = {
       id: Date.now(),
       ...newLeadData,
       date: new Date().toLocaleString('vi-VN'),
       status: 'Mới'
     };
-    setLeads(prev => [newEntry, ...prev]);
-
-    // Send Realtime Telegram Notification
-    sendTelegramNotification(newEntry);
+    setLeads(prev => [fallbackEntry, ...prev]);
+    sendTelegramNotification(fallbackEntry);
+    return fallbackEntry;
   };
 
-  const updateLeadStatus = (id, newStatus, notes = '') => {
+  // API Call to update Lead status
+  const updateLeadStatus = async (id, newStatus, notes = '') => {
     setLeads(prev => prev.map(item => item.id === id ? { ...item, status: newStatus, notes: notes || item.notes } : item));
+    try {
+      await fetch(`/api/leads/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus, notes })
+      });
+    } catch (err) {
+      console.error('Failed to update lead status via API:', err);
+    }
   };
 
-  const deleteLead = (id) => {
+  // API Call to delete Lead
+  const deleteLead = async (id) => {
     setLeads(prev => prev.filter(item => item.id !== id));
+    try {
+      await fetch(`/api/leads/${id}`, {
+        method: 'DELETE'
+      });
+    } catch (err) {
+      console.error('Failed to delete lead via API:', err);
+    }
   };
 
-  const addSignal = (sig) => {
+  // API Call to add Signal
+  const addSignal = async (sig) => {
+    try {
+      const res = await fetch('/api/signals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sig)
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setSignals(prev => [created, ...prev]);
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to add signal via API:', err);
+    }
     setSignals(prev => [sig, ...prev]);
   };
 

@@ -31,6 +31,7 @@ export default function AnimatedCandles({ height = 220 }) {
           <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', display: 'inline-block', animation: 'blink 1.2s infinite' }} />
           <span style={{ fontWeight: 900, color: 'var(--gold-bright)' }}>XAUUSD 1M Live Chart</span>
         </div>
+
         <div style={{ color: 'var(--green-win)', fontWeight: 800, fontFamily: 'monospace', fontSize: '0.95rem' }}>
           $2,648.50 <span style={{ fontSize: '0.75rem' }}>(+142 pips)</span>
         </div>
@@ -46,6 +47,7 @@ export default function AnimatedCandles({ height = 220 }) {
         zIndex: 2,
         padding: '0 10px'
       }}>
+
         {/* Candle 1 (Bullish Green) */}
         <div className="candle-wrapper" style={{ height: '70%', animationDelay: '0s' }}>
           <div className="wick" style={{ height: '100%', width: '2px', background: '#34d399', margin: '0 auto' }} />
@@ -84,7 +86,7 @@ export default function AnimatedCandles({ height = 220 }) {
           right: 0,
           borderTop: '2px dashed var(--gold-bright)',
           display: 'flex',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           padding: '2px 8px',
           color: 'var(--gold-bright)',
           fontSize: '0.72rem',
