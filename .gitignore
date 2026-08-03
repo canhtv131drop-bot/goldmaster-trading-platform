@@ -19,7 +19,7 @@ coverage
 node_modules/
 
 # Production build directory
-dist/
+# dist/
 
 # Env files
 .env
