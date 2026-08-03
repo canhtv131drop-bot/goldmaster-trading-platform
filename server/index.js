@@ -141,6 +141,42 @@ app.post('/api/signals', async (req, res) => {
   }
 });
 
+// --- Notifications Endpoints ---
+app.get('/api/notifications', async (req, res) => {
+  try {
+    const list = await dbAll(`SELECT * FROM notifications ORDER BY id DESC`);
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/notifications', async (req, res) => {
+  try {
+    const { title, content, time } = req.body;
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title và Content không được để trống' });
+    }
+    const result = await dbRun(
+      `INSERT INTO notifications (title, content, time) VALUES (?, ?, ?)`,
+      [title, content, time || 'Vừa xong']
+    );
+    res.status(201).json({ id: result.lastID, title, content, time: time || 'Vừa xong' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/notifications/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await dbRun(`DELETE FROM notifications WHERE id = ?`, [id]);
+    res.json({ success: true, id: Number(id) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- CMS Settings Endpoints ---
 app.get('/api/cms', async (req, res) => {
   try {

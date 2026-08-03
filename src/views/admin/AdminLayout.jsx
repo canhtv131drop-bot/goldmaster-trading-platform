@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { LayoutDashboard, Users, Monitor, Settings, ArrowLeft, ShieldAlert, Lock, Key, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Monitor, Settings, ArrowLeft, ShieldAlert, Lock, Key, LogOut, Bell } from 'lucide-react';
 import EasyGoldLogo from '../../components/EasyGoldLogo';
 
 export default function AdminLayout({ children }) {
@@ -11,6 +11,7 @@ export default function AdminLayout({ children }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard Tổng Quan', icon: LayoutDashboard },
     { id: 'leads', label: 'Quản Lý Leads (CRM)', icon: Users, badgeCount: newLeadsCount },
+    { id: 'notifications', label: 'Quản Lý Notification (Toast)', icon: Bell },
     { id: 'cms', label: 'CMS Nội Dung Landing Page', icon: Monitor },
     { id: 'settings', label: 'Cài Đặt Hệ Thống & Pixel', icon: Settings }
   ];

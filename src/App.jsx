@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import SocialProofToast from './components/SocialProofToast';
 
 // Public Funnel Views
 import HomeView from './views/HomeView';
@@ -19,6 +20,7 @@ import CourseManager from './views/admin/CourseManager';
 import TestimonialManager from './views/admin/TestimonialManager';
 import CmsManager from './views/admin/CmsManager';
 import SystemSettings from './views/admin/SystemSettings';
+import NotificationManager from './views/admin/NotificationManager';
 
 function MainContent() {
   const { currentRoute, setCurrentRoute, adminTab, setAdminTab } = useApp();
@@ -42,6 +44,7 @@ function MainContent() {
       <AdminLayout>
         {activeTab === 'dashboard' && <AdminDashboard />}
         {activeTab === 'leads' && <LeadsManager />}
+        {activeTab === 'notifications' && <NotificationManager />}
         {activeTab === 'signals' && <SignalManager />}
         {activeTab === 'courses' && <CourseManager />}
         {activeTab === 'testimonials' && <TestimonialManager />}
@@ -64,6 +67,7 @@ function MainContent() {
       </main>
 
       <Footer />
+      <SocialProofToast />
     </div>
   );
 }

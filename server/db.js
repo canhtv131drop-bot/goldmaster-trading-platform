@@ -31,14 +31,26 @@ const defaultData = {
   admin: [
     { id: 1, password: 'Canhdepzai1999@' }
   ],
-  nextLeadId: 3
+  notifications: [
+    { id: 1, title: 'Anh Nguyễn Văn Hùng (0988***456)', content: 'Vừa đăng ký tham gia Nhóm Zalo VIP Tín Hiệu Gold', time: '2 phút trước' },
+    { id: 2, title: 'Chị Trần Thị Mai (0912***678)', content: 'Vừa chốt lời +95 Pips lệnh BUY XAUUSD', time: '5 phút trước' },
+    { id: 3, title: 'Anh Lê Hoàng Nam (0903***889)', content: 'Vừa tham gia Khóa Học Trading SMC Crazii', time: '8 phút trước' },
+    { id: 4, title: 'Hệ Thống EasyGold VIP', content: 'Vừa bắn tín hiệu SELL NOW XAUUSD @ 2658.00', time: '12 phút trước' }
+  ],
+  nextLeadId: 3,
+  nextNotificationId: 5
 };
 
 function loadData() {
   try {
     if (fs.existsSync(jsonPath)) {
       const raw = fs.readFileSync(jsonPath, 'utf8');
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (!parsed.notifications) {
+        parsed.notifications = defaultData.notifications;
+        parsed.nextNotificationId = defaultData.nextNotificationId;
+      }
+      return parsed;
     }
   } catch (err) {
     console.error('Error loading JSON database:', err);
@@ -81,6 +93,8 @@ export function dbAll(sql, params = []) {
       resolve([...store.cms]);
     } else if (cleanSql.includes('from admin')) {
       resolve([...store.admin]);
+    } else if (cleanSql.includes('from notifications')) {
+      resolve([...(store.notifications || [])]);
     } else {
       resolve([]);
     }
@@ -172,6 +186,25 @@ export function dbRun(sql, params = []) {
         store.admin.push({ id: 1, password: newPassword });
       }
       saveData(store);
+      resolve({ changes: 1 });
+    } else if (cleanSql.includes('insert into notifications')) {
+      const [title, content, time] = params;
+      const newNotif = {
+        id: store.nextNotificationId++,
+        title,
+        content,
+        time: time || 'Vừa xong'
+      };
+      if (!store.notifications) store.notifications = [];
+      store.notifications.unshift(newNotif);
+      saveData(store);
+      resolve({ lastID: newNotif.id, changes: 1 });
+    } else if (cleanSql.includes('delete from notifications')) {
+      const id = Number(params[0]);
+      if (store.notifications) {
+        store.notifications = store.notifications.filter(r => r.id !== id);
+        saveData(store);
+      }
       resolve({ changes: 1 });
     } else {
       resolve({ changes: 0 });
