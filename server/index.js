@@ -210,13 +210,15 @@ const distPath = path.join(__dirname, '../dist');
 
 app.use(express.static(distPath));
 
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
-  res.sendFile(path.join(distPath, 'index.html'), (err) => {
-    if (err) {
-      res.status(404).send('Backend API Server is running. If you are developing, please open the Vite frontend dev server (default http://localhost:3000).');
-    }
-  });
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api')) {
+    return res.sendFile(path.join(distPath, 'index.html'), (err) => {
+      if (err) {
+        res.status(404).send('Backend API Server is running.');
+      }
+    });
+  }
+  next();
 });
 
 app.listen(PORT, '0.0.0.0', () => {
