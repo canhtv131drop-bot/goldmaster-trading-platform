@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initDb, dbAll, dbGet, dbRun } from './db.js';
 
 const app = express();
@@ -199,6 +201,22 @@ app.put('/api/auth/password', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// --- Static Frontend & SPA Fallback ---
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, '../dist');
+
+app.use(express.static(distPath));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(distPath, 'index.html'), (err) => {
+    if (err) {
+      res.status(404).send('Backend API Server is running. If you are developing, please open the Vite frontend dev server (default http://localhost:3000).');
+    }
+  });
 });
 
 app.listen(PORT, () => {
