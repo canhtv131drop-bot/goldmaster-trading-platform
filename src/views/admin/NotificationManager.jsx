@@ -9,7 +9,7 @@ export default function NotificationManager() {
   // Form State
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [time, setTime] = useState('Vừa xong');
+  const [time, setTime] = useState('45 giây');
 
   const fetchNotifications = async () => {
     try {
@@ -43,7 +43,7 @@ export default function NotificationManager() {
         setMessage('Đã thêm thông báo mới thành công!');
         setTitle('');
         setContent('');
-        setTime('Vừa xong');
+        setTime('45 giây');
         fetchNotifications();
         setTimeout(() => setMessage(''), 3000);
       }

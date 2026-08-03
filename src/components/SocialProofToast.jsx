@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 const DEFAULT_NOTIFS = [
-  { id: 1, title: 'Anh Nguyễn Văn Hùng (0988***456)', content: 'Vừa đăng ký tham gia Nhóm Zalo VIP Tín Hiệu Gold', time: '2 phút trước' },
-  { id: 2, title: 'Chị Trần Thị Mai (0912***678)', content: 'Vừa chốt lời +95 Pips lệnh BUY XAUUSD', time: '5 phút trước' },
-  { id: 3, title: 'Anh Lê Hoàng Nam (0903***889)', content: 'Vừa tham gia Khóa Học Trading SMC Crazii', time: '8 phút trước' },
-  { id: 4, title: 'Hệ Thống EasyGold VIP', content: 'Vừa bắn tín hiệu SELL NOW XAUUSD @ 2658.00', time: '12 phút trước' }
+  { id: 1, title: 'Anh Nguyễn Văn Hùng (0988***456)', content: 'Vừa đăng ký tham gia Nhóm Zalo VIP Tín Hiệu Gold', time: '45 giây trước' },
+  { id: 2, title: 'Chị Trần Thị Mai (0912***678)', content: 'Vừa chốt lời +95 Pips lệnh BUY XAUUSD', time: '45 giây' },
+  { id: 3, title: 'Anh Lê Hoàng Nam (0903***889)', content: 'Vừa tham gia Khóa Học Trading SMC Crazii', time: '45 giây trước' },
+  { id: 4, title: 'Hệ Thống EasyGold VIP', content: 'Vừa bắn tín hiệu SELL NOW XAUUSD @ 2658.00', time: '45 giây' }
 ];
 
 export default function SocialProofToast() {
